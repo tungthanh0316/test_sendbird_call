@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'sendbird_channels.dart';
 
@@ -19,48 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
   String? callerNickname;
   SendbirdChannels? channels;
 
-  final appId = "D56438AE-B4DB-4DC9-B440-E032D7B35CEB";
-  final userId = "tanika";
+  final appId = "4BA72387-8396-42AC-87A0-D88A21079FEA";
+  final userId = "aaa";
+  final apiToken = "f36452cbd6da3534328212647ae0f53f8eaa8846";
 
   @override
   void initState() {
-    channels = SendbirdChannels(directCallReceived: ((userId, nickname) {
-      setState(() {
-        callerId = userId;
-        callerNickname = nickname;
-        _areReceivingCall = true;
-      });
-    }), directCallConnected: () {
-      setState(() {
-        _areCalling = false;
-        _areReceivingCall = false;
-        _isCallActive = true;
-      });
-    }, directCallEnded: () {
-      setState(() {
-        _isCallActive = false;
-        _areCalling = false;
-        _areReceivingCall = false;
-        callerId = null;
-        callerNickname = null;
-      });
-    }, onError: ((message) {
-      print(
-          "home_screen.dart: initState: SendbirdChannels: onError: message: $message");
-    }), onLog: ((message) {
-      print(
-          "home_screen.dart: initState: SendbirdChannels onLog: message: $message");
-    }));
-    channels
-        ?.initSendbird(
-          appId: appId,
-          userId: userId,
-        )
-        .then((value) => setState(() {
-              _areConnected = value;
-            }));
-
     super.initState();
+    initSendbird();
   }
 
   @override
@@ -230,5 +197,60 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void handleMsg() async {
+    print('TOKEN: ${await FirebaseMessaging.instance.getToken()}');
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
+     await channels?.pickupCall();
+    });
+  }
+
+  void initSendbird() async {
+    channels = SendbirdChannels(directCallReceived: ((userId, nickname) {
+      print('directCallReceived');
+      setState(() {
+        callerId = userId;
+        callerNickname = nickname;
+        _areReceivingCall = true;
+      });
+    }), directCallConnected: () {
+      setState(() {
+        _areCalling = false;
+        _areReceivingCall = false;
+        _isCallActive = true;
+      });
+    }, directCallEnded: () {
+      setState(() {
+        _isCallActive = false;
+        _areCalling = false;
+        _areReceivingCall = false;
+        callerId = null;
+        callerNickname = null;
+      });
+    }, onError: ((message) {
+      print(
+          "home_screen.dart: initState: SendbirdChannels: onError: message: $message");
+    }), onLog: ((message) {
+      print(
+          "home_screen.dart: initState: SendbirdChannels onLog: message: $message");
+    }));
+    final pushToken = await FirebaseMessaging.instance.getToken();
+    print('pushToken: $pushToken');
+
+    FirebaseMessaging.onMessage.listen((event) {
+      print('New MSG: ${event.data}');
+    });
+
+    channels
+        ?.initSendbird(
+          appId: appId,
+          userId: userId,
+          accessToken: apiToken,
+          pushToken: pushToken,
+        )
+        .then((value) => setState(() {
+              _areConnected = value;
+            }));
   }
 }

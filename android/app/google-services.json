@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1081986247986",
+    "project_id": "fir-sendbird-call",
+    "storage_bucket": "fir-sendbird-call.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081986247986:android:f760abc3dfc23c974cfb2b",
+        "android_client_info": {
+          "package_name": "com.example.sendbird_flutter_calls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081986247986-ek6egt3a31d6vm6ucfrd4hme428vlbja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBkz-C9rptmaxiIITIC4Ljcd5EI2MgsFQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081986247986-ek6egt3a31d6vm6ucfrd4hme428vlbja.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -26,20 +26,23 @@ class SendbirdChannels {
     required String appId,
     required String userId,
     String? accessToken,
+    String? pushToken,
   }) async {
+    print('initing sendbird');
     try {
       platform.setMethodCallHandler(_handleNativeMethods);
-
       final bool result = await platform.invokeMethod(
         "init",
         {
           "app_id": appId,
           "user_id": userId,
           "access_token": accessToken,
+          "push_token": pushToken,
         },
       );
       this.appId = appId;
       this.userId = userId;
+      print('réult: $result');
       return result;
     } catch (e) {
       print('sendbird_channels: initSendbird: ERROR: $e');
